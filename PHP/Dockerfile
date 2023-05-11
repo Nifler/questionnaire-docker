@@ -29,6 +29,29 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Добавим свой php.ini, можем в нем определять свои значения конфига
 ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
+ARG UID
+ARG GID
+#RUN if [[ -z "$UID" ]] ; then ENV UID=1000 ; else echo user id is $UID ; fi
+#RUN if [[ -z "$GID" ]] ; then ENV GID=1000 ; else echo group id is $GID ; fi
+ENV GNAME=php
+ENV UNAME=php
+
+RUN addgroup \
+    --gid $GID \
+    -S \
+    "$GNAME"
+
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "$(pwd)" \
+    --ingroup "$GNAME" \
+    --no-create-home \
+    --uid "$UID" \
+    "$UNAME"
+
+USER "$UNAME"
+
 # Указываем рабочую директорию для PHP
 WORKDIR /var/www
 

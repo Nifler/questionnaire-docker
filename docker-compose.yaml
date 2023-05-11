@@ -19,6 +19,9 @@ services:
     build:
       context: ./PHP
       dockerfile: Dockerfile
+      args:
+        UID: ${UD:-1000}
+        GID: ${GD:-1000}
     container_name: php-fpm
     volumes:
       - ./www:/var/www
