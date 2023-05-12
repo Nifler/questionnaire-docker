@@ -14,6 +14,8 @@ services:
       - ./Nginx/html:/usr/share/nginx/html/
     links:
       - php
+    networks:
+      - app-network
 
   php:
     build:
@@ -27,6 +29,8 @@ services:
       - ./www:/var/www
     links:
       - mysql
+    networks:
+      - app-network
 
   mysql:
     image: mysql:latest
@@ -34,17 +38,16 @@ services:
     - "3306:3306"
     container_name: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=DB_ROOT_PASSWORD
-      - MYSQL_DATABASE=DB_NAME
-      - MYSQL_USER=DB_USER
-      - MYSQL_PASSWORD=DB_PASSWORD
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=db
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_USER=db_user
+      - MYSQL_PASSWORD=password
     volumes:
       - ./MySQL:/var/lib/mysql
+    networks:
+      - app-network
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    ports:
-      - 8090:80
-    links:
-      - mysql:db
+#Networks
+networks:
+  app-network:
