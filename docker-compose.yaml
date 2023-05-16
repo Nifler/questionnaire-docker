@@ -24,7 +24,7 @@ services:
       args:
         UID: ${UD:-1000}
         GID: ${GD:-1000}
-    container_name: php-fpm
+    container_name: php
     volumes:
       - ./www:/var/www
     links:
