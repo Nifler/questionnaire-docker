@@ -1,0 +1,12 @@
+version: 1.0
+os: linux
+files:
+  - source: /
+    destination: ./www
+hooks:
+  BeforeInstall:
+    - location: scripts/run-docker.sh
+  AfterInstall:
+    - location: scripts/run-env-preparation.sh
+  ApplicationStart:
+    - location: scripts/run-laravel.sh
