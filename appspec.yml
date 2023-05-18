@@ -2,7 +2,7 @@ version: 1.0
 os: linux
 files:
   - source: /
-    destination: ./www
+    destination: /home/ubuntu/questionnaire
 hooks:
   BeforeInstall:
   AfterInstall:
