@@ -1,4 +1,3 @@
-# Для начала указываем исходный образ, он будет использован как основа
 FROM php:fpm-alpine3.17
 
 ARG UID
@@ -21,10 +20,7 @@ RUN adduser \
     "$UNAME"
 
 USER root
-# RUN выполняет идущую за ней команду в контексте нашего образа.
-# В данном случае мы установим некоторые зависимости и модули PHP.
-# Для установки модулей используем команду docker-php-ext-install.
-# На каждый RUN создается новый слой в образе, поэтому рекомендуется объединять команды.
+
 RUN apk --no-cache add curl
 RUN apk --no-cache add git
 
@@ -47,13 +43,11 @@ RUN docker-php-ext-install -j "$(nproc)" pdo_mysql
 #	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 #        && docker-php-ext-install -j$(nproc) gd
 
-# Куда же без composer'а.
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Добавим свой php.ini, можем в нем определять свои значения конфига
 ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
-# Указываем рабочую директорию для PHP
 WORKDIR /var/www
 
 USER "$UNAME"
