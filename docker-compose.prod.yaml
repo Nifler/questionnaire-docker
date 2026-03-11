@@ -1,0 +1,56 @@
+version: '3.3'
+services:
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Nginx/core:/etc/nginx/conf.d
+      - ./Nginx/Logs:/var/log/nginx/
+    depends_on:
+      - php
+      - nextjs
+    networks:
+      - app-network
+
+  nextjs:
+    image: ghcr.io/nifler/questionnaire-front:latest
+    container_name: nextjs
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  php:
+    image: ghcr.io/nifler/questionnaire-app:latest
+    container_name: php
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
