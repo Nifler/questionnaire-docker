@@ -9,11 +9,25 @@ services:
       - "443:443"
     volumes:
       - ./Nginx/core:/etc/nginx/conf.d
-      - ./www:/var/www/
+      - ../www:/var/www/
       - ./Nginx/Logs:/var/log/nginx/
       - ./Nginx/html:/usr/share/nginx/html/
     links:
       - php
+      - nextjs
+    networks:
+      - app-network
+
+  nextjs:
+    volumes:
+      - ../front:/app
+      - /app/node_modules
+    build:
+      context: ../front
+      dockerfile: ../baseDocker/Nextjs/Dockerfile
+    ports:
+      - "3000:3000"
+    command: npm run dev
     networks:
       - app-network
 
@@ -26,7 +40,7 @@ services:
         GID: ${GD:-1000}
     container_name: php
     volumes:
-      - ./www:/var/www
+      - ../www:/var/www
     links:
       - mysql
     networks:
