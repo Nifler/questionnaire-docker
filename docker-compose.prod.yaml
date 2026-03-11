@@ -7,6 +7,7 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "8080:8080"
       - "443:443"
     volumes:
       - ./Nginx/core:/etc/nginx/conf.d
