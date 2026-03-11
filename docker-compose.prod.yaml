@@ -30,7 +30,7 @@ services:
     container_name: php
     restart: unless-stopped
     env_file:
-      - /home/ubuntu/questionnaire/app.env
+      - /home/ubuntu/questionnaire/.env
     depends_on:
       - mysql
     networks:
