@@ -14,6 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Generate app.env
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cat > /home/ubuntu/questionnaire/app.env << 'EOF'
+            ${{ vars.APP_ENV }}
+            EOF
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
