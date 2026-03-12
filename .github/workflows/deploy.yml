@@ -14,17 +14,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate app.env on EC2
+      - name: Generate .env files on EC2
         uses: appleboy/ssh-action@v1
         env:
           APP_ENV_CONTENT: ${{ vars.APP_ENV }}
+          DOCKER_ENV_CONTENT: ${{ vars.DOCKER_ENV }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: APP_ENV_CONTENT
+          envs: APP_ENV_CONTENT,DOCKER_ENV_CONTENT
           script: |
             printf '%s' "$APP_ENV_CONTENT" > /home/ubuntu/questionnaire/.env
+            printf '%s' "$DOCKER_ENV_CONTENT" > /home/ubuntu/questionnaire/docker.env
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
