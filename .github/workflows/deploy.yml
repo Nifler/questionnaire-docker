@@ -28,6 +28,15 @@ jobs:
             printf '%s' "$APP_ENV_CONTENT" > /home/ubuntu/questionnaire/.env
             printf '%s' "$DOCKER_ENV_CONTENT" > /home/ubuntu/questionnaire/docker.env
 
+      - name: Copy configs to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.prod.yaml,Nginx/core/"
+          target: /home/ubuntu/questionnaire/
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
