@@ -12,6 +12,7 @@ services:
     volumes:
       - ./Nginx/core:/etc/nginx/conf.d
       - ./Nginx/Logs:/var/log/nginx/
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - php
       - nextjs
